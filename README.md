@@ -1,4 +1,7 @@
-# FinSight Lite: Multi-Agent AI Financial Research Analyst
+# FinSight Lite: Multi-Agent AI Financial 
+Live Demo :https://finsight-lite-piyush.streamlit.app/#fin-sight-lite
+
+Research Analyst
 
 FinSight Lite turns a company name into an analyst-style investment memo. A small team of AI agents fetches market data, calculates financial ratios, flags risks, searches the company's annual report, and writes a memo with page-level citations.
 
