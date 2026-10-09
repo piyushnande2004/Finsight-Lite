@@ -6,7 +6,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from tools.financials import get_financials
 from tools.rag import search_report
 
-load_dotenv()
+load_dotenv(override=True)
 llm = ChatGoogleGenerativeAI(model=os.getenv("MODEL", "gemini-2.0-flash"))
 
 class State(TypedDict, total=False):
@@ -33,7 +33,11 @@ def risk_agent(s):
     return {"flags": flags}
 
 def research_agent(s):
-    return {"passages": search_report(f"{s['company']} business model, risks and outlook")}
+    pdf = f"{s['company'].lower().strip()}.pdf"
+    passages = search_report(
+        f"{s['company']} business model, risks and outlook", source=pdf
+    )
+    return {"passages": passages}
 
 def writer_agent(s):
     ctx = "\n".join(f"[{p['source']} p.{p['page']}] {p['text']}" for p in s["passages"])
@@ -47,10 +51,15 @@ ANNUAL REPORT EXCERPTS:
 {ctx}
 
 Sections: Business Overview, Financial Health, Risks, Verdict (Strong / Neutral / Weak)."""
-    resp = llm.invoke(prompt).content
-    if isinstance(resp, list):
-        resp = "".join(b.get("text", "") if isinstance(b, dict) else str(b) for b in resp)
-    return {"memo": resp}
+    content = llm.invoke(prompt).content
+    if isinstance(content, list):
+        content = "".join(
+            b["text"] if isinstance(b, dict) and "text" in b else (b if isinstance(b, str) else "")
+            for b in content
+        )
+    if not content.strip():
+        raise ValueError("The model returned an empty memo. Run again or change MODEL in .env")
+    return {"memo": content}
 
 g = StateGraph(State)
 g.add_node("data", data_agent)

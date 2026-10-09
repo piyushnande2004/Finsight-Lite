@@ -6,17 +6,26 @@ col = client.get_or_create_collection("reports")
 def ingest(pdf_path, chunk=1000):
     name = os.path.basename(pdf_path)
     reader = pypdf.PdfReader(pdf_path)
+    total = len(reader.pages)
     for i, page in enumerate(reader.pages):
         text = page.extract_text() or ""
+        docs, metas, ids = [], [], []
         for j in range(0, len(text), chunk):
             piece = text[j:j + chunk]
             if piece.strip():
-                col.upsert(documents=[piece],
-                           metadatas=[{"source": name, "page": i + 1}],
-                           ids=[f"{name}-{i}-{j}"])
+                docs.append(piece)
+                metas.append({"source": name, "page": i + 1})
+                ids.append(f"{name}-{i}-{j}")
+        if docs:
+            col.upsert(documents=docs, metadatas=metas, ids=ids)
+        if (i + 1) % 10 == 0 or i + 1 == total:
+            print(f"{name}: page {i + 1}/{total}", flush=True)
 
-def search_report(question, k=4):
-    r = col.query(query_texts=[question], n_results=k)
+def search_report(question, k=4, source=None):
+    kwargs = {"query_texts": [question], "n_results": k}
+    if source:
+        kwargs["where"] = {"source": source}
+    r = col.query(**kwargs)
     return [{"text": d, "source": m["source"], "page": m["page"]}
             for d, m in zip(r["documents"][0], r["metadatas"][0])]
 

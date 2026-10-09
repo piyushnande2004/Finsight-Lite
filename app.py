@@ -1,12 +1,18 @@
 import streamlit as st
 from agents.graph import app_graph
 
+COMPANIES = {
+    "Infosys": "INFY.NS",
+    "TCS": "TCS.NS",
+}
+
 st.set_page_config(page_title="FinSight Lite", page_icon="📊")
 st.title("📊 FinSight Lite")
 st.caption("Multi-agent AI financial research: data, risk, RAG and report agents")
 
-company = st.text_input("Company name", "Infosys")
-ticker = st.text_input("Ticker (for example INFY.NS or TCS.NS)", "INFY.NS")
+company = st.selectbox("Choose a company", list(COMPANIES.keys()))
+ticker = COMPANIES[company]
+st.write(f"Ticker: **{ticker}** | Annual report: **{company.lower()}.pdf**")
 
 if st.button("Analyze"):
     try:
