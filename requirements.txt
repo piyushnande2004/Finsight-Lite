@@ -1,0 +1,8 @@
+langgraph
+langchain-google-genai
+yfinance
+chromadb
+pypdf
+fonttools
+streamlit
+python-dotenv
