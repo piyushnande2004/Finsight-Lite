@@ -47,7 +47,10 @@ ANNUAL REPORT EXCERPTS:
 {ctx}
 
 Sections: Business Overview, Financial Health, Risks, Verdict (Strong / Neutral / Weak)."""
-    return {"memo": llm.invoke(prompt).content}
+    resp = llm.invoke(prompt).content
+    if isinstance(resp, list):
+        resp = "".join(b.get("text", "") if isinstance(b, dict) else str(b) for b in resp)
+    return {"memo": resp}
 
 g = StateGraph(State)
 g.add_node("data", data_agent)
