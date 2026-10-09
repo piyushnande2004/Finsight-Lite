@@ -49,13 +49,19 @@ Python, LangGraph, LangChain, Google Gemini API, ChromaDB, pypdf, yfinance, Stre
 
 ## Screenshots
 
-| Home and ratios | Investment memo |
-|---|---|
-| ![Home](screenshots/home.png) | ![Memo](screenshots/memo.png) |
+## Screenshots
 
-| Risk section | Sources |
-|---|---|
-| ![Risks](screenshots/risks.png) | ![Sources](screenshots/sources.png) |
+### Home and ratios
+![Home](screenshots/home.png)
+
+### Investment memo
+![Memo](screenshots/memo.png)
+
+### Risks and verdict
+![Risks](screenshots/risks.png)
+
+### Sources from the annual report
+![Sources](screenshots/sources.png)
 
 ## Project Structure
 
@@ -145,4 +151,4 @@ python -m pytest
 
 ## Author
 
-Piyush Nande | [GitHub](https://github.com/piyushnande2004) | [LinkedIn](https://linkedin.com/in/piyush-nandea7506a2a1)
+Piyush Nande | [GitHub]https://github.com/piyushnande2004 | [LinkedIn]https://www.linkedin.com/in/piyush-nande-a7506a2a1
